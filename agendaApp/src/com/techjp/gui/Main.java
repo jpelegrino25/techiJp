@@ -5,11 +5,20 @@
  */
 package com.techjp.gui;
 
+import com.techijp.entities.Contact;
+import com.techijp.services.ContactService;
+import com.techjp.gui.templates.ContactListModel;
+import java.util.List;
+import java.util.Objects;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Quantum1
  */
 public class Main extends javax.swing.JFrame {
+
+    private final String SEARCH="Search";
 
     /**
      * Creates new form Main
@@ -17,7 +26,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,14 +36,20 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        contactService=new ContactService();
+        contactList=contactService.findAll();
         bg = new javax.swing.JPanel();
         panelHome = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
+        contactService.buildContactValues();
+        contactList=contactService.findAll();
+        ContactListModel contactModel=new ContactListModel(contactList);
         list = new javax.swing.JList<>();
         btnAdd = new javax.swing.JButton();
-        panelAdmin = new javax.swing.JPanel();
+        btnEdit = new javax.swing.JButton();
+        panelAdd = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txFname = new javax.swing.JTextField();
@@ -42,8 +57,18 @@ public class Main extends javax.swing.JFrame {
         txLname = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txPhone = new javax.swing.JFormattedTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnCancelCreation = new javax.swing.JButton();
+        panelEdit = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        txFnameEdit = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txLnameEdit = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txPhoneEdit = new javax.swing.JFormattedTextField();
+        btnSaveEdition = new javax.swing.JButton();
+        btnCancelEdition = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -58,7 +83,6 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setText("Contacts");
 
         txSearch.setBackground(new java.awt.Color(204, 204, 204));
-        txSearch.setText("Search");
         txSearch.setToolTipText("");
         txSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -68,21 +92,39 @@ public class Main extends javax.swing.JFrame {
                 txSearchFocusLost(evt);
             }
         });
+        txSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txSearchMouseClicked(evt);
+            }
+        });
         txSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txSearchActionPerformed(evt);
             }
         });
-
-        list.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        txSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txSearchKeyReleased(evt);
+            }
         });
+
+        list.setModel(contactModel);
         jScrollPane1.setViewportView(list);
 
         btnAdd.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         btnAdd.setText("+");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setText("*");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelHomeLayout = new javax.swing.GroupLayout(panelHome);
         panelHome.setLayout(panelHomeLayout);
@@ -96,6 +138,8 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txSearch)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHomeLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnAdd)))
                 .addContainerGap())
         );
@@ -103,8 +147,10 @@ public class Main extends javax.swing.JFrame {
             panelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHomeLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(btnAdd)
-                .addGap(18, 18, 18)
+                .addGroup(panelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdd)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -115,8 +161,8 @@ public class Main extends javax.swing.JFrame {
 
         bg.add(panelHome, "card2");
 
-        panelAdmin.setBackground(new java.awt.Color(255, 255, 255));
-        panelAdmin.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(0, 0, 0)));
+        panelAdd.setBackground(new java.awt.Color(255, 255, 255));
+        panelAdd.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(0, 0, 0)));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Add Contact"));
 
@@ -135,9 +181,19 @@ public class Main extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
-        jButton1.setText("Save");
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cancel");
+        btnCancelCreation.setText("Cancel");
+        btnCancelCreation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelCreationActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -155,9 +211,9 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCancelCreation, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -177,29 +233,125 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(txPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelCreation, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27))
         );
 
-        javax.swing.GroupLayout panelAdminLayout = new javax.swing.GroupLayout(panelAdmin);
-        panelAdmin.setLayout(panelAdminLayout);
-        panelAdminLayout.setHorizontalGroup(
-            panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelAdminLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelAddLayout = new javax.swing.GroupLayout(panelAdd);
+        panelAdd.setLayout(panelAddLayout);
+        panelAddLayout.setHorizontalGroup(
+            panelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        panelAdminLayout.setVerticalGroup(
-            panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelAdminLayout.createSequentialGroup()
+        panelAddLayout.setVerticalGroup(
+            panelAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        bg.add(panelAdmin, "card3");
+        bg.add(panelAdd, "card3");
+
+        panelEdit.setBackground(new java.awt.Color(255, 255, 255));
+        panelEdit.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(0, 0, 0)));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Edit Contact"));
+
+        jLabel5.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        jLabel5.setText("First Name");
+
+        jLabel6.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        jLabel6.setText("Last Name");
+
+        jLabel7.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        jLabel7.setText("Phone Number");
+
+        try {
+            txPhoneEdit.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        btnSaveEdition.setText("Save");
+        btnSaveEdition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveEditionActionPerformed(evt);
+            }
+        });
+
+        btnCancelEdition.setText("Cancel");
+        btnCancelEdition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelEditionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txPhoneEdit, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txFnameEdit)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txLnameEdit)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(btnSaveEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCancelEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txFnameEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txLnameEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txPhoneEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27))
+        );
+
+        javax.swing.GroupLayout panelEditLayout = new javax.swing.GroupLayout(panelEdit);
+        panelEdit.setLayout(panelEditLayout);
+        panelEditLayout.setHorizontalGroup(
+            panelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelEditLayout.setVerticalGroup(
+            panelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEditLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        bg.add(panelEdit, "card3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,18 +372,106 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_txSearchActionPerformed
 
     private void txSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txSearchFocusGained
-        if(txSearch.getText().isEmpty()) {
-            txSearch.setText("Search");
-        }
-        System.out.println("Gained Focus");
+//        if(txSearch.getText().isEmpty()) {
+//            txSearch.setText("Search");
+//        }
+        
     }//GEN-LAST:event_txSearchFocusGained
 
     private void txSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txSearchFocusLost
-        if(txSearch.getText().isEmpty()) {
-            txSearch.setText("Search");
-        } 
-        System.out.println("Lost Focus");
+//        if(txSearch.getText().isEmpty()) {
+//            txSearch.setText("Search");
+//        } 
+//        System.out.println("Lost Focus");
     }//GEN-LAST:event_txSearchFocusLost
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        this.changeScreen(panelAdd);
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        String selection=list.getSelectedValue();
+        String values []=selection.split(" ");
+        
+        String firstName="";
+        String lastName="";
+        boolean hasError=false;
+        switch(values.length) {
+            case 2:
+            firstName=values[0];
+            lastName=values[1];
+            contact=contactService.findContactByName(firstName, lastName); 
+            break;
+            case 1:
+            firstName=values[0];
+            contact=contactService.findContactByName(firstName, lastName);            
+            break;
+            default:
+                hasError=true;
+                break;
+        }
+        
+        
+        if(!hasError) {
+            populateContactEdition(contact);
+            this.changeScreen(panelEdit);
+        }else {
+            System.out.println("Invalid Value");
+        }
+            
+        
+        
+        
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnCancelEditionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEditionActionPerformed
+        this.changeScreen(panelHome);
+    }//GEN-LAST:event_btnCancelEditionActionPerformed
+
+    private void btnCancelCreationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelCreationActionPerformed
+        this.changeScreen(panelHome);
+    }//GEN-LAST:event_btnCancelCreationActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        String firstName=txFname.getText();
+        String lastName=txLname.getText();
+        String phoneNumber=txPhone.getText();
+        Contact newContact=new Contact(firstName,lastName,phoneNumber);
+        contactService.AddContact(newContact);
+        
+       this.refreshContactList(null);
+        
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSaveEditionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEditionActionPerformed
+       String firstName=txFnameEdit.getText();
+       String lastName=txLnameEdit.getText();
+       String phoneNumber=txPhoneEdit.getText();
+       
+       contact.setFirstName(firstName);
+       contact.setLastName(lastName);
+       contact.setPhoneNumber(phoneNumber);
+       
+       contactService.updateContact(contact);
+       
+       this.refreshContactList(null);
+        
+    }//GEN-LAST:event_btnSaveEditionActionPerformed
+
+    private void txSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txSearchMouseClicked
+//       if(txSearch.getText().equals(SEARCH)) {
+//           txSearch.setText("");
+//       }
+        
+    }//GEN-LAST:event_txSearchMouseClicked
+
+    private void txSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txSearchKeyReleased
+        contactList=contactService.findByCriteria(txSearch.getText());
+        this.refreshContactList(contactList);
+        txSearch.requestFocus();
+        
+        
+    }//GEN-LAST:event_txSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -272,21 +512,54 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnCancelCreation;
+    private javax.swing.JButton btnCancelEdition;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSaveEdition;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> list;
-    private javax.swing.JPanel panelAdmin;
+    private javax.swing.JPanel panelAdd;
+    private javax.swing.JPanel panelEdit;
     private javax.swing.JPanel panelHome;
     private javax.swing.JTextField txFname;
+    private javax.swing.JTextField txFnameEdit;
     private javax.swing.JTextField txLname;
+    private javax.swing.JTextField txLnameEdit;
     private javax.swing.JFormattedTextField txPhone;
+    private javax.swing.JFormattedTextField txPhoneEdit;
     private javax.swing.JTextField txSearch;
     // End of variables declaration//GEN-END:variables
-    
+    private List<Contact> contactList;
+    private ContactService contactService;
+    private Contact contact;
+
+    public void changeScreen(JPanel screen) {
+        bg.removeAll();
+        bg.add(screen);
+        bg.repaint();
+        bg.revalidate();
+    }
+    private void populateContactEdition(Contact contact) {
+        txFnameEdit.setText(contact.getFirstName());
+        txLnameEdit.setText(contact.getLastName());
+        txPhoneEdit.setText(contact.getPhoneNumber());
+    }
+
+    private void refreshContactList(List<Contact> contacts) {
+       List<Contact> updateContactList=contacts!=null ?contacts
+               :contactService.findAll();
+        ContactListModel model=new ContactListModel(updateContactList);
+        list.setModel(model);
+        this.changeScreen(panelHome);
+    }
 }

@@ -7,6 +7,7 @@ package com.techijp.services;
 
 import com.techijp.entities.Contact;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class ContactService {
     
     
     public List<Contact> findAll() {
+        Collections.sort(contacts);
         return contacts;
     }
     
@@ -61,7 +63,14 @@ public class ContactService {
     }
     
     
-    
+    public void buildContactValues() {       
+        
+        AddContact(new Contact("Juan", "Martinez", "809-741-2365"));
+        AddContact(new Contact("Pedro", "Gonzalez", "809-200-2365"));
+        AddContact(new Contact("Carlos", "Rodriguez", "809-333-2365"));
+        AddContact(new Contact("Jose", "Rodriguez", "809-333-2365"));
+        AddContact(new Contact("Rafael", "", "809-333-2365"));
+    }
     
     
     

@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Quantum1
  */
-public class Contact {
+public class Contact implements Comparable<Contact> {
     
     private int id;   
     private String firstName;
@@ -71,7 +71,8 @@ public class Contact {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.id;
+        hash = 79 * hash + this.id;
+        hash = 79 * hash + Objects.hashCode(this.firstName);
         return hash;
     }
 
@@ -90,7 +91,24 @@ public class Contact {
         if (this.id != other.id) {
             return false;
         }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.phoneNumber, other.phoneNumber)) {
+            return false;
+        }
         return true;
+    }
+
+    
+
+    @Override
+    public int compareTo(Contact o) {
+     return   this.getFirstName().
+             compareTo(o.getFirstName());
     }
     
    
