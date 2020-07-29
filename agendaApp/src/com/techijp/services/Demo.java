@@ -41,6 +41,8 @@ public class Demo {
         System.out.println("CRITERIA");
         System.out.println(contactService.findByCriteria("Rodrig"));
         
+      
+        
         
       
     }

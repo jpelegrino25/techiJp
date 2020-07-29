@@ -8,6 +8,7 @@ package com.techjp.gui;
 import com.techijp.entities.Contact;
 import com.techijp.services.ContactService;
 import com.techjp.gui.templates.ContactListModel;
+import java.awt.Cursor;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.JPanel;
@@ -25,6 +26,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        TextPrompt prompt=new TextPrompt(SEARCH, txSearch);
     }
     
     /**
@@ -71,6 +73,8 @@ public class Main extends javax.swing.JFrame {
         btnCancelEdition = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/agenda.png")).getImage());
+        setLocation(new java.awt.Point(400, 100));
         setResizable(false);
 
         bg.setBackground(new java.awt.Color(255, 255, 255));
@@ -84,19 +88,6 @@ public class Main extends javax.swing.JFrame {
 
         txSearch.setBackground(new java.awt.Color(204, 204, 204));
         txSearch.setToolTipText("");
-        txSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txSearchFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txSearchFocusLost(evt);
-            }
-        });
-        txSearch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txSearchMouseClicked(evt);
-            }
-        });
         txSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txSearchActionPerformed(evt);
@@ -112,14 +103,14 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(list);
 
         btnAdd.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
-        btnAdd.setText("+");
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/add-new.png"))); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnEdit.setText("*");
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/edit-icon.png"))); // NOI18N
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
@@ -138,19 +129,19 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(txSearch)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHomeLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAdd)))
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelHomeLayout.setVerticalGroup(
             panelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHomeLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(panelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAdd)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                .addGroup(panelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -181,6 +172,7 @@ public class Main extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/save-icon.png"))); // NOI18N
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,6 +180,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnCancelCreation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/back-arrow.png"))); // NOI18N
         btnCancelCreation.setText("Cancel");
         btnCancelCreation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -233,8 +226,8 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(txPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelCreation, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelCreation, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27))
         );
 
@@ -252,7 +245,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(panelAddLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bg.add(panelAdd, "card3");
@@ -277,6 +270,7 @@ public class Main extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        btnSaveEdition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/save-icon.png"))); // NOI18N
         btnSaveEdition.setText("Save");
         btnSaveEdition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -284,6 +278,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnCancelEdition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/techjp/gui/images/back-arrow.png"))); // NOI18N
         btnCancelEdition.setText("Cancel");
         btnCancelEdition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -329,8 +324,8 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(txPhoneEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSaveEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSaveEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelEdition))
                 .addGap(27, 27, 27))
         );
 
@@ -348,7 +343,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(panelEditLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         bg.add(panelEdit, "card3");
@@ -371,26 +366,17 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txSearchActionPerformed
 
-    private void txSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txSearchFocusGained
-//        if(txSearch.getText().isEmpty()) {
-//            txSearch.setText("Search");
-//        }
-        
-    }//GEN-LAST:event_txSearchFocusGained
-
-    private void txSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txSearchFocusLost
-//        if(txSearch.getText().isEmpty()) {
-//            txSearch.setText("Search");
-//        } 
-//        System.out.println("Lost Focus");
-    }//GEN-LAST:event_txSearchFocusLost
-
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         this.changeScreen(panelAdd);
+        txFname.setText("");
+        txLname.setText("");
+        txPhone.setText("");
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String selection=list.getSelectedValue();
+        if(selection!=null) {
+            
         String values []=selection.split(" ");
         
         String firstName="";
@@ -405,7 +391,7 @@ public class Main extends javax.swing.JFrame {
             case 1:
             firstName=values[0];
             contact=contactService.findContactByName(firstName, lastName);            
-            break;
+            break;            
             default:
                 hasError=true;
                 break;
@@ -418,7 +404,10 @@ public class Main extends javax.swing.JFrame {
         }else {
             System.out.println("Invalid Value");
         }
-            
+           
+        }else {
+            System.out.println("You have to select one");
+        }
         
         
         
@@ -458,19 +447,10 @@ public class Main extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnSaveEditionActionPerformed
 
-    private void txSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txSearchMouseClicked
-//       if(txSearch.getText().equals(SEARCH)) {
-//           txSearch.setText("");
-//       }
-        
-    }//GEN-LAST:event_txSearchMouseClicked
-
     private void txSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txSearchKeyReleased
         contactList=contactService.findByCriteria(txSearch.getText());
         this.refreshContactList(contactList);
         txSearch.requestFocus();
-        
-        
     }//GEN-LAST:event_txSearchKeyReleased
 
     /**
